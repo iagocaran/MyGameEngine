@@ -1,4 +1,5 @@
 #include <iostream>
+#include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
 void error_callback(int error, const char* description) {
@@ -19,8 +20,9 @@ int main() {
 
     glfwSetErrorCallback(error_callback);
 
-    glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
-    glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(640, 480, "GLFW Window", nullptr, nullptr);
     if (!window) {
@@ -31,6 +33,12 @@ int main() {
 
     glfwMakeContextCurrent(window);
     glfwSetKeyCallback(window, key_callback);
+    if (!gladLoadGL((GLADloadfunc) glfwGetProcAddress)) {
+        std::cout << "Failed to inialize GLAD" << std::endl;
+        glfwDestroyWindow(window);
+        glfwTerminate();
+        return EXIT_FAILURE;
+    }
 
     while (!glfwWindowShouldClose(window))
     {
